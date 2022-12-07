@@ -1,10 +1,12 @@
-import { FC, FormEvent } from 'react';
-import {Box, Button, Divider, Grid, InputLabel, TextField, Typography} from "@mui/material";
-import {Link} from "react-router-dom";
+import {FC, FormEvent, useEffect} from 'react';
+import {Box, Button, CircularProgress, Divider, Grid, InputLabel, TextField, Typography} from "@mui/material";
+import { Link, useNavigate } from 'react-router-dom';
 import {validateNameLength, validatePasswordLength} from "../../utils/validation/length";
 
 import useInput from '../../hooks/input/use-input'
 import {validateEmail} from "../../utils/validation/email";
+import {useAppDispatch, useAppSelector} from "../../hooks/redux/hooks";
+import {NewUser} from "./models/NewUser";
 
 const RegisterForm: FC = () => {
 
@@ -13,15 +15,15 @@ const RegisterForm: FC = () => {
         shouldDisplayError: nameHasError,
         textChangeHandler: nameChangeHandler,
         inputBlurHandler: nameBlurHandler,
-        clearHandler: nameClearHandler
-    } = useInput(validateNameLength);
+        clearHandler: nameClearHandler,
+    } = useInput(validateNameLength)
 
     const {
         text: email,
         shouldDisplayError: emailHasError,
         textChangeHandler: emailChangeHandler,
         inputBlurHandler: emailBlurHandler,
-        clearHandler: emailClearHandler
+        clearHandler: emailClearHandler,
     } = useInput(validateEmail);
 
     const {
@@ -29,7 +31,7 @@ const RegisterForm: FC = () => {
         shouldDisplayError: passwordHasError,
         textChangeHandler: passwordChangeHandler,
         inputBlurHandler: passwordBlurHandler,
-        clearHandler: passwordClearHandler
+        clearHandler: passwordClearHandler,
     } = useInput(validatePasswordLength);
 
     const {
@@ -37,7 +39,7 @@ const RegisterForm: FC = () => {
         shouldDisplayError: confirmPasswordHasError,
         textChangeHandler: confirmPasswordChangeHandler,
         inputBlurHandler: confirmPasswordBlurHandler,
-        clearHandler: confirmPasswordClearHandler
+        clearHandler: confirmPasswordClearHandler,
     } = useInput(validatePasswordLength);
 
     const {
@@ -48,10 +50,60 @@ const RegisterForm: FC = () => {
         clearHandler: phoneClearHandler
     } = useInput(validateNameLength);
 
+    const clearForm = () => {
+        nameClearHandler();
+        emailClearHandler();
+        passwordClearHandler();
+        confirmPasswordClearHandler();
+        phoneClearHandler();
+    }
+
+    const dispatch = useAppDispatch();
+
+    // const { isLoading, isSuccess } = useAppSelector((state) => state.auth);
+
+    const navigate = useNavigate();
+
+    // useEffect(() => {
+    //     if (isSuccess) {
+    //         // dispatch(reset());
+    //         clearForm();
+    //         navigate('/signin');
+    //     }
+    // }, [isSuccess, dispatch]);
+
     const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('click')
+        if (password !== confirmPassword) return;
+
+        if (
+            nameHasError ||
+            emailHasError ||
+            passwordHasError ||
+            confirmPasswordHasError
+        )
+            return;
+
+        if (
+            name.length === 0 ||
+            email.length === 0 ||
+            password.length === 0 ||
+            confirmPassword.length === 0
+        )
+            return;
+
+        const newUser: NewUser = {
+            name,
+            email,
+            password,
+            phone
+        };
+        console.log('newUser', newUser)
+        // dispatch(register(newUser));
     }
+
+    // if (isLoading)
+    //     return <CircularProgress sx={{ marginTop: '64px' }} color='primary' />;
 
     return (
         <Box sx={{border: 1, padding: 2, borderColor: '#cccccc', width: '350px', marginTop: 2}}>
@@ -69,12 +121,12 @@ const RegisterForm: FC = () => {
                         onChange={emailChangeHandler}
                         onBlur={emailBlurHandler}
                         error={emailHasError}
-                        helperText={emailHasError ? 'Invalid your email' : ''}
-                        type={'text'}
-                        name={'email'}
-                        id={'email'}
-                        variant={'outlined'}
-                        size={'small'}
+                        helperText={emailHasError ? 'Enter your email' : ''}
+                        type='email'
+                        name='email'
+                        id='email'
+                        variant='outlined'
+                        size='small'
                     />
 
                     <InputLabel sx={{fontWeight: 500, marginTop: 1, color: '#000000', htmlFor: 'password' }}>
@@ -85,12 +137,13 @@ const RegisterForm: FC = () => {
                         onChange={passwordChangeHandler}
                         onBlur={passwordBlurHandler}
                         error={passwordHasError}
-                        helperText={passwordHasError ? 'Invalid your password' : ''}
-                        type={'password'}
-                        name={'password'}
-                        id={'password'}
-                        variant={'outlined'}
-                        size={'small'}
+                        helperText={passwordHasError ? 'Minimum 6 characters required' : ''}
+                        type='password'
+                        name='password'
+                        id='password'
+                        variant='outlined'
+                        size='small'
+                        placeholder='Minimum 6 characters required'
                     />
 
                     <InputLabel sx={{fontWeight: 500, marginTop: 1, color: '#000000', htmlFor: 'confirmPassword' }}>
@@ -101,12 +154,16 @@ const RegisterForm: FC = () => {
                         onChange={confirmPasswordChangeHandler}
                         onBlur={confirmPasswordBlurHandler}
                         error={confirmPassword.length > 0 && password !== confirmPassword}
-                        helperText={confirmPassword.length > 0 && password !== confirmPassword  ? 'Passwords must match' : ''}
-                        type={'password'}
-                        name={'confirmPassword'}
-                        id={'confirmPassword'}
-                        variant={'outlined'}
-                        size={'small'}
+                        helperText={
+                            confirmPassword.length > 0 && password !== confirmPassword
+                                ? 'Passwords must match'
+                                : ''
+                        }
+                        type='password'
+                        name='confirmPassword'
+                        id='confirmPassword'
+                        variant='outlined'
+                        size='small'
                     />
 
                     <InputLabel sx={{fontWeight: 500, marginTop: 1, color: '#000000', htmlFor: 'name' }}>
@@ -118,11 +175,11 @@ const RegisterForm: FC = () => {
                         onBlur={nameBlurHandler}
                         error={nameHasError}
                         helperText={nameHasError ? 'Enter your name' : ''}
-                        type={'text'}
-                        name={'name'}
-                        id={'name'}
-                        variant={'outlined'}
-                        size={'small'}
+                        type='text'
+                        name='name'
+                        id='name'
+                        variant='outlined'
+                        size='small'
                     />
 
                     <InputLabel sx={{fontWeight: 500, marginTop: 1, color: '#000000', htmlFor: 'phone' }}>
