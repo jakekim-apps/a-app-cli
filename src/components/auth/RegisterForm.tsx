@@ -5,8 +5,10 @@ import {validateNameLength, validatePasswordLength} from "../../utils/validation
 
 import useInput from '../../hooks/input/use-input'
 import {validateEmail} from "../../utils/validation/email";
-import {useAppDispatch, useAppSelector} from "../../hooks/redux/hooks";
 import {NewUser} from "./models/NewUser";
+import {useDispatch} from "react-redux";
+import {register} from "../../actions/auth";
+
 
 const RegisterForm: FC = () => {
 
@@ -58,7 +60,8 @@ const RegisterForm: FC = () => {
         phoneClearHandler();
     }
 
-    const dispatch = useAppDispatch();
+    const dispatch = useDispatch()
+    // const dispatch = useAppDispatch();
 
     // const { isLoading, isSuccess } = useAppSelector((state) => state.auth);
 
@@ -72,34 +75,38 @@ const RegisterForm: FC = () => {
     //     }
     // }, [isSuccess, dispatch]);
 
-    const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (password !== confirmPassword) return;
+    const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
+        try {
+            e.preventDefault();
+            if (password !== confirmPassword) return;
 
-        if (
-            nameHasError ||
-            emailHasError ||
-            passwordHasError ||
-            confirmPasswordHasError
-        )
-            return;
+            if (
+                nameHasError ||
+                emailHasError ||
+                passwordHasError ||
+                confirmPasswordHasError
+            )
+                return;
 
-        if (
-            name.length === 0 ||
-            email.length === 0 ||
-            password.length === 0 ||
-            confirmPassword.length === 0
-        )
-            return;
+            if (
+                name.length === 0 ||
+                email.length === 0 ||
+                password.length === 0 ||
+                confirmPassword.length === 0
+            )
+                return;
 
-        const newUser: NewUser = {
-            name,
-            email,
-            password,
-            phone
-        };
-        console.log('newUser', newUser)
-        // dispatch(register(newUser));
+            const newUser: NewUser = {
+                name,
+                email,
+                password,
+                phone
+            };
+            await dispatch(register(newUser));
+            navigate('/signin')
+        } catch (e) {
+            console.log('error here', e)
+        }
     }
 
     // if (isLoading)
