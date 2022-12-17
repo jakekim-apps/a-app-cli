@@ -1,4 +1,4 @@
-import {FC, FormEvent, useEffect} from 'react';
+import {FC, FormEvent, useEffect, useState} from 'react';
 import {Box, Button, CircularProgress, Divider, Grid, InputLabel, TextField, Typography} from "@mui/material";
 import { Link, useNavigate } from 'react-router-dom';
 import {validateNameLength, validatePasswordLength} from "../../utils/validation/length";
@@ -8,6 +8,7 @@ import {validateEmail} from "../../utils/validation/email";
 import {NewUser} from "./models/NewUser";
 import {useDispatch} from "react-redux";
 import {register} from "../../actions/auth";
+import CommonDialog from "../Dialog";
 
 
 const RegisterForm: FC = () => {
@@ -58,22 +59,30 @@ const RegisterForm: FC = () => {
         passwordClearHandler();
         confirmPasswordClearHandler();
         phoneClearHandler();
-    }
+    };
 
-    const dispatch = useDispatch()
-    // const dispatch = useAppDispatch();
+    const dispatch = useDispatch();
 
-    // const { isLoading, isSuccess } = useAppSelector((state) => state.auth);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [dialogOption, setDialogOption] = useState<any>(null);
+
+
+    const openDialog = (options: any) => {
+        setDialogOption({
+            title: options.title,
+            body: options.body,
+            btnLabel: options.btnLabel,
+            btnAction: options.btnAction
+        });
+        setIsOpen(true);
+    };
+
+    const closeDialog = () => {
+        setIsOpen(false);
+        setDialogOption(null);
+    };
 
     const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     if (isSuccess) {
-    //         // dispatch(reset());
-    //         clearForm();
-    //         navigate('/signin');
-    //     }
-    // }, [isSuccess, dispatch]);
 
     const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
         try {
@@ -103,14 +112,18 @@ const RegisterForm: FC = () => {
                 phone
             };
             await dispatch(register(newUser));
-            navigate('/signin')
-        } catch (e) {
+            navigate('/signin');
+        } catch (e : any) {
             console.log('error here', e)
+            openDialog({
+                title: 'Register Failed!',
+                body: e.message,
+                btnLabel: 'Confirm',
+                btnAction: closeDialog
+            });
+
         }
     }
-
-    // if (isLoading)
-    //     return <CircularProgress sx={{ marginTop: '64px' }} color='primary' />;
 
     return (
         <Box sx={{border: 1, padding: 2, borderColor: '#cccccc', width: '350px', marginTop: 2}}>
@@ -231,6 +244,19 @@ const RegisterForm: FC = () => {
                     <Link to={'/signin'} style={{textDecoration: 'none', color: '#0000ee'}}>Sign-in</Link>
                 </small>
             </div>
+
+
+            {
+                isOpen &&
+                    <CommonDialog
+                        isOpen={isOpen}
+                        onClose={closeDialog}
+                        title={dialogOption.title}
+                        body={dialogOption.body}
+                        btnLabel={dialogOption.btnLabel}
+                        btnAction={dialogOption.btnAction}
+                    />
+            }
 
         </Box>
 

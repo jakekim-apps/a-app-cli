@@ -1,4 +1,4 @@
-import { FC, FormEvent } from 'react';
+import {FC, FormEvent, useState} from 'react';
 import {Box, Button, Divider, Grid, InputLabel, TextField, Typography} from "@mui/material";
 import {Link, useNavigate} from "react-router-dom";
 import useInput from "../../hooks/input/use-input";
@@ -7,6 +7,7 @@ import {validateEmail} from "../../utils/validation/email";
 import {useDispatch} from "react-redux";
 import {login} from "../../actions/auth";
 import {authService} from "../../services/auth.service";
+import CommonDialog from "../Dialog";
 
 const SigninForm: FC = () => {
 
@@ -29,6 +30,25 @@ const SigninForm: FC = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [dialogOption, setDialogOption] = useState<any>(null);
+
+
+    const openDialog = (options: any) => {
+        setDialogOption({
+            title: options.title,
+            body: options.body,
+            btnLabel: options.btnLabel,
+            btnAction: options.btnAction
+        });
+        setIsOpen(true);
+    };
+
+    const closeDialog = () => {
+        setIsOpen(false);
+        setDialogOption(null);
+    };
+
     const onSubmitHandler = async () => {
         try {
             if (
@@ -45,8 +65,14 @@ const SigninForm: FC = () => {
 
             await dispatch(login({email, password}));
             navigate('/dashboard')
-        } catch (e) {
-            console.log(e, 'loginError')
+        } catch (e: any) {
+            console.log('error here', e)
+            openDialog({
+                title: 'Login Failed!',
+                body: e.message,
+                btnLabel: 'Confirm',
+                btnAction: closeDialog
+            });
         }
     }
 
@@ -119,6 +145,19 @@ const SigninForm: FC = () => {
             >
                 <Button variant={'contained'} style={{width: '100%', marginTop: '12px', height: '31px', color: 'black', backgroundColor: '#f1f1f1', textTransform: 'none'}}>Register</Button>
             </Link>
+
+            {
+                isOpen &&
+                <CommonDialog
+                    isOpen={isOpen}
+                    onClose={closeDialog}
+                    title={dialogOption.title}
+                    body={dialogOption.body}
+                    btnLabel={dialogOption.btnLabel}
+                    btnAction={dialogOption.btnAction}
+                />
+            }
+
         </Box>
     )
 }

@@ -1,16 +1,11 @@
 import MainLayout from "../components/layout/MainLayout";
 
-const MainPage = () => {
+const HistoryPage = () => {
     return (
-
         <MainLayout>
-            <div>MainPage</div>
+            <div>hPage</div>
         </MainLayout>
+    )
+};
 
-        )
-
-
-
- };
-
-export default MainPage
+export default HistoryPage

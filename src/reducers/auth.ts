@@ -3,7 +3,14 @@ import  * as types from "../actions/types";
 import {DecodedJwt} from "../components/auth/models/DecodedJwt.interface";
 import jwt_decode from "jwt-decode";
 
-export function auth(state = initialState.user, action: any) {
+interface authState {
+    token: string | null,
+    email: string | null,
+    name: string | null,
+    phone: string | null,
+}
+
+export function auth(state: authState = initialState.user, action: any) {
     switch (action.type) {
         case types.auth.REGISTER_SUCCESS:
             return {

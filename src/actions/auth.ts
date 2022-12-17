@@ -18,6 +18,8 @@ interface responseInterface {
     message: string
 }
 
+
+
 const handleResponse = (response: responseInterface) => {
     const { status_code, message } = response;
     if (status_code === 200) {
@@ -27,20 +29,22 @@ const handleResponse = (response: responseInterface) => {
     }
 }
 
+const handleErrorMessage = (e: any) => {
+    const { response } = e;
+    return response.data;
+};
+
 async function doRegister(data: registerInterface) {
     try {
         const res = await authService.register(data);
         if (res.status === 200) {
             return res.data
         } else {
-            return res;
+            throw res;
         }
     } catch (e) {
-        return e
+        throw handleErrorMessage(e);
     }
-
-    // return handleResponse(res as any);
-    // return await authService.register(data);
 }
 
 async function doLogin(data: loginInterface) {
@@ -52,7 +56,7 @@ async function doLogin(data: loginInterface) {
             throw res.status
         }
     } catch (e) {
-        throw e
+        throw handleErrorMessage(e);
     }
 }
 
@@ -64,4 +68,4 @@ export const register = (data: registerInterface) => ({
 export const login = (data: loginInterface) => ({
     type: types.auth.LOGIN,
     payload: doLogin(data)
-})
+});

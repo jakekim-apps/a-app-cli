@@ -4,6 +4,7 @@ import { theme } from './utils/theme';
 import MainPage from "./pages/Main";
 import SigninPage from "./pages/Signin";
 import RegisterPage from "./pages/Register";
+import HistoryPage from "./pages/History";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
               <Route path={'/'} element={<MainPage />} />
               <Route path={'/register'} element={<RegisterPage />} />
               <Route path={'/signin'} element={<SigninPage />} />
+              <Route path={'/histories'} element={<HistoryPage />} />
           </Routes>
         </Router>
       </ThemeProvider>
