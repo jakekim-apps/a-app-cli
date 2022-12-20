@@ -8,6 +8,9 @@ import HistoryPage from "./pages/History";
 import TestPage from "./pages/Test";
 import UserPage from "./pages/User";
 import DashBoard from "./pages/DashBoard";
+import CardPage from "./pages/Card";
+import CategoryPage from "./pages/Category";
+import AccountPage from "./pages/Account";
 
 function App() {
   return (
@@ -20,6 +23,9 @@ function App() {
               <Route path={'/histories'} element={<HistoryPage />} />
               <Route path={'/dashboard'} element={<DashBoard />} />
               <Route path={'/users'} element={<UserPage />} />
+              <Route path={'/cards'} element={<CardPage />} />
+              <Route path={'/accounts'} element={<AccountPage />} />
+              <Route path={'/categories'} element={<CategoryPage />} />
               <Route path={'/test'} element={<TestPage />} />
           </Routes>
         </Router>

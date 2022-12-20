@@ -5,7 +5,7 @@ const NavItems = [
     {
         id: 'dashBoard',
         text: 'Dash Board',
-        path: '/'
+        path: '/dashboard'
     },
     {
         id: 'history',

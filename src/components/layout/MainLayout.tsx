@@ -12,7 +12,7 @@ const MainLayout = ( props: any ) => {
                     <div style={{height: '100%', width: '15%'}}>
                         <SideBar />
                     </div>
-                    <div style={{height: '100%', width: '85%'}}>
+                    <div style={{height: '100%', width: '85%', padding: '30px'}}>
                         { props.children }
                     </div>
             </div>

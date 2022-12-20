@@ -45,7 +45,7 @@ const AppHeader = () => {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" style={{ color: '#fff', height: '60px', boxShadow: 'none', backgroundColor: '#339966' }}>
+            <AppBar position="static" style={{ color: '#003366', height: '60px', boxShadow: 'none', backgroundColor: '#fff' }}>
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         A
