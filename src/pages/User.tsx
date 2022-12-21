@@ -4,6 +4,7 @@ import CommonTable from "../components/Table";
 import {useEffect, useState} from "react";
 import {cardService} from "../services/card.service";
 import {userService} from "../services/user.service";
+import {headers} from "../utils/TableHeaders";
 
 
 const UserPage = () => {
@@ -22,25 +23,6 @@ const UserPage = () => {
     useEffect(() => {
         getUsers();
     }, []);
-
-    const headers = [
-        {
-            key: 'email',
-            text: 'Email'
-        },
-        {
-            key: 'name',
-            text: 'Name'
-        },
-        {
-            key: 'phone',
-            text: 'Phone'
-        },
-        {
-            key: 'createdAt',
-            text: 'Created At'
-        }
-    ];
 
     const [selectedIdList, setSelectedIdList] = useState<string[]>([]);
 
@@ -89,7 +71,7 @@ const UserPage = () => {
             <Grid item xs={12} style={{marginTop: '15px'}}>
                 <CommonTable
                     type={'user'}
-                    headers={headers}
+                    headers={headers.user}
                     data={data}
                     onClickRow={onClickRow}
                     selectedIdList={selectedIdList}

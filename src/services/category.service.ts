@@ -23,18 +23,24 @@ interface categoryInterface {
 
 const postCategory = (params: categoryInterface) => {
     let [method, url] = api.postCategory;
+    let  data = params;
+
+    let requestConfig: RequestConfig = serviceConfig.makeRequestConfig({method, url, data});
+    return axios.request(requestConfig)
+}
+
+const deleteCategories = (idList: string[]) => {
+    let [method, url] = api.deleteCategory;
     let  data = {
-        name: params.name,
-        description: params.description
+        idList: idList
     };
 
     let requestConfig: RequestConfig = serviceConfig.makeRequestConfig({method, url, data});
     return axios.request(requestConfig)
 }
 
-
-
 export const categoryService = {
     getCategories,
     postCategory,
+    deleteCategories
 };

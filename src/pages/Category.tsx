@@ -1,8 +1,10 @@
 import MainLayout from "../components/layout/MainLayout";
-import { Button, Divider, Grid} from "@mui/material";
+import {Button, Divider, Grid, TextField} from "@mui/material";
 import CommonTable from "../components/Table";
 import {useEffect, useState} from "react";
 import {categoryService} from "../services/category.service";
+import {headers} from "../utils/TableHeaders";
+import CommonModal from "../components/Modal";
 
 
 const CategoryPage = () => {
@@ -24,16 +26,7 @@ const CategoryPage = () => {
         getCategories();
     }, []);
 
-    const headers = [
-        {
-            key: 'name',
-            text: 'name'
-        },
-        {
-            key: 'description',
-            text: 'Description'
-        }
-    ];
+
 
     const [selectedIdList, setSelectedIdList] = useState<string[]>([]);
 
@@ -69,14 +62,76 @@ const CategoryPage = () => {
         console.log(row);
     }
 
-    // modal
+    const [modal, setModal] = useState(false);
+    const handleCloseModal = () => {
+        setAccount({
+            name: '',
+            description: ''
+        })
+        setModal(false);
+    }
+    const handleOpenModal = () => {
+        setModal(true);
+    }
+
+    const [category, setAccount] = useState({
+        name: '',
+        description: ''
+    });
+
+
+    const handleChangeTextField = (e: any) => {
+        const { name, value } = e.target;
+        setAccount({
+            ...category,
+            [name]: value
+        })
+    }
+
+    const registerCategory = async (category: any) => {
+        try {
+            const res = await categoryService.postCategory(category);
+            handleCloseModal();
+            getCategories()
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const handleSaveAccount = () => {
+        const { name, description } = category;
+        if (name.length === 0) {
+            return
+        }
+        registerCategory(category);
+    }
+
+    const deleteCategories = async (idList: string[]) => {
+        try {
+            const res = await categoryService.deleteCategories(idList);
+            getCategories();
+            setSelectedIdList([]);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const handleDeleteCategories = () => {
+        if (selectedIdList.length === 0) {
+            return
+        }
+        deleteCategories(selectedIdList)
+    }
 
     return (
             <Grid container>
                 <Grid item xs={12} style={{fontSize: '32px', fontWeight: 'bold', display: 'flex'}}>
                             Category
                         <div style={{marginLeft: 'auto'}}>
-                            <Button variant={'outlined'}>Button</Button>
+                            {
+                                selectedIdList.length > 0 && <Button variant={'outlined'} onClick={handleDeleteCategories}>Remove</Button>
+                            }
+                            <Button variant={'outlined'} onClick={handleOpenModal}>Button</Button>
                         </div>
 
                 </Grid>
@@ -87,7 +142,7 @@ const CategoryPage = () => {
                 <Grid item xs={12} style={{marginTop: '15px'}}>
                     <CommonTable
                         type={'category'}
-                        headers={headers}
+                        headers={headers.category}
                         data={data}
                         onClickRow={onClickRow}
                         selectedIdList={selectedIdList}
@@ -95,6 +150,43 @@ const CategoryPage = () => {
                         handleClickHeaderCheckbox={handleHeaderCheckbox}
                     />
                 </Grid>
+
+                {
+                    modal &&
+                    <CommonModal
+                        open={modal}
+                        onClose={handleCloseModal}
+                    >
+                        <div style={{padding: '20px 30px'}}>
+                            <div style={{margin: '10px', fontWeight: 'bold', fontSize: '16px'}}>
+                                Category
+                            </div>
+                            <div style={{margin: '10px'}}>
+                                <TextField
+                                    size={'small'}
+                                    label={'Name'}
+                                    name={'name'}
+                                    value={category.name}
+                                    onChange={handleChangeTextField}
+                                />
+                            </div>
+                            <div style={{margin: '10px'}}>
+                                <TextField
+                                    size={'small'}
+                                    label={'Description'}
+                                    name={'description'}
+                                    value={category.description}
+                                    onChange={handleChangeTextField}
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <Button onClick={handleCloseModal}>Cancel</Button>
+                            <Button onClick={handleSaveAccount}>Save</Button>
+                        </div>
+                    </CommonModal>
+                }
+
             </Grid>
 
 

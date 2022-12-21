@@ -7,6 +7,7 @@ import {accountService} from "../services/account.service";
 import {historyService} from "../services/history.service";
 import {categoryService} from "../services/category.service";
 import HistoryEditor from "../components/pages/history/HistoryEditor";
+import {headers} from "../utils/TableHeaders";
 
 
 const HistoryPage = () => {
@@ -59,36 +60,6 @@ const HistoryPage = () => {
         getCategories();
         getHistories();
     }, []);
-
-    const headers = [
-        {
-            key: 'date',
-            text: 'Date'
-        },
-        {
-            key: 'amount',
-            text: 'Amount'
-        },
-        {
-            key: 'type',
-            text: 'Type'
-        },
-        {
-            key: 'targetId',
-            text: 'Type Name'
-        },
-        {
-            key: 'categoryId',
-            text: 'Category'
-        },
-        {
-            key: 'description',
-            text: 'Description'
-        },
-
-    ];
-
-
 
     const onClickRow = (row: any) => {
         console.log(row);
@@ -161,7 +132,7 @@ const HistoryPage = () => {
             <Grid item xs={12} style={{marginTop: '15px'}}>
                 <CommonTable
                     type={'history'}
-                    headers={headers}
+                    headers={headers.history}
                     data={data}
                     onClickRow={onClickRow}
                     selectedIdList={selectedIdList}

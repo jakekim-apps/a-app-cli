@@ -15,32 +15,34 @@ const getCards = () => {
     return axios.request(requestConfig);
 }
 
-const register = () => {
-    // let [method, url] = api.register;
-    // let data = {
-    //     email: params.email,
-    //     password: params.password,
-    //     name: params.name,
-    //     phone: params.phone
-    // };
-    //
-    // let requestConfig: RequestConfig = serviceConfig.makeRequestConfig({method, url, data});
-    // return axios.request(requestConfig);
+interface cardInterface {
+    name: string
+    number: string
+    description: string
 }
 
-const login = () => {
-    // let [method, url] = api.login;
-    // let  data = {
-    //     email: params.email,
-    //     password: params.password
-    // };
-    //
-    // let requestConfig: RequestConfig = serviceConfig.makeRequestConfig({method, url, data});
-    // return axios.request(requestConfig)
+const registerCard = (card: cardInterface) => {
+    let [method, url] = api.postCard;
+    let data = card;
+
+    let requestConfig: RequestConfig = serviceConfig.makeRequestConfig({method, url, data});
+    return axios.request(requestConfig);
+}
+
+const deleteCards = (idList: string[]) => {
+    let [method, url] = api.deleteCard;
+    let data = {
+        idList: idList
+    };
+
+    let requestConfig: RequestConfig = serviceConfig.makeRequestConfig({method, url, data});
+    return axios.request(requestConfig);
 }
 
 
 
 export const cardService = {
-    getCards
+    getCards,
+    registerCard,
+    deleteCards
 };
