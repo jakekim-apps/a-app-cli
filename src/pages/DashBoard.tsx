@@ -3,6 +3,7 @@ import {Grid, Paper} from "@mui/material";
 import Chart from "react-apexcharts"
 import { ApexOptions } from 'apexcharts'
 import {useState} from "react";
+import CommonTable from "../components/common/Table";
 const DashBoard = (props: any) => {
 
     const option : ApexOptions = {
@@ -115,7 +116,6 @@ const DashBoard = (props: any) => {
 
 
     return (
-        <MainLayout>
             <Grid container alignItems={'flex-start'}>
                 <Grid xs={12}>
                     {/*<Paper elevation={4}>*/}
@@ -144,7 +144,7 @@ const DashBoard = (props: any) => {
                     {/*</Paper>*/}
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={12} style={{marginTop: '30px'}}>
                     {/*<Paper elevation={4}>*/}
                         <Grid container spacing={1}>
                             <Grid item xs={6}>
@@ -163,25 +163,38 @@ const DashBoard = (props: any) => {
                     {/*</Paper>*/}
                 </Grid>
 
-                {/*<Grid item xs={12}>*/}
-                {/*    <Paper elevation={4}>*/}
-                {/*        <Grid container spacing={1}>*/}
-                {/*            <Grid item xs={6}>*/}
-                {/*                <Paper elevation={4}>*/}
-                {/*                    Table 1*/}
-                {/*                </Paper>*/}
-                {/*            </Grid>*/}
-                {/*            <Grid item xs={6}>*/}
-                {/*                <Paper elevation={4}>*/}
-                {/*                    Table 2*/}
-                {/*                </Paper>*/}
-                {/*            </Grid>*/}
-                {/*        </Grid>*/}
-                {/*    </Paper>*/}
-                {/*</Grid>*/}
+                <Grid item xs={12} style={{marginTop: '30px'}}>
+                    <Grid container spacing={1}>
+                        <Grid item xs={3}>
+                            total with list
+                        </Grid>
+                        <Grid item xs={3}>
+                            total with list
+                        </Grid>
+                        <Grid item xs={6}>
+                            latest list
+                        </Grid>
+                    </Grid>
+                </Grid>
+
+                <Grid item xs={12} style={{marginTop: '30px'}}>
+                    {/*<Paper elevation={4}>*/}
+                        <Grid container spacing={1}>
+                            <Grid item xs={6}>
+                                <Paper elevation={4}>
+                                    <CommonTable />
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Paper elevation={4}>
+                                    <CommonTable />
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    {/*</Paper>*/}
+                </Grid>
 
             </Grid>
-        </MainLayout>
     )
 }
 export default DashBoard;

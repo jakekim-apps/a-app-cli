@@ -7,6 +7,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Checkbox from "@mui/material/Checkbox";
+import {useEffect, useState} from "react";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -88,10 +90,22 @@ interface tableProps {
     type: string
     headers: any[]
     data: any[]
+    selectedIdList: string[]
     onClickRow(d: any): void
+    handleClickCheckbox:(e: any, id: string) => void
+    handleClickHeaderCheckbox:(e: any) => void
+    // categories?: any[]
+    // accounts?: any[]
+    // cards?: any[]
 }
 
 const CommonTable = (props: tableProps) => {
+
+    const makeTargetData = () => {
+
+    }
+
+    const [targetData, setTargetData] = useState([]);
 
     const headers = props.headers || [];
     const rows = props.data || [];
@@ -107,19 +121,43 @@ const CommonTable = (props: tableProps) => {
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
                 <TableHead>
                     <TableRow>
+                        <StyledTableCell padding="checkbox">
+                            <Checkbox
+                                color="primary"
+                                indeterminate={props.selectedIdList.length > 0 && props.selectedIdList.length < props.data.length}
+                                checked={props.data.length > 0 && props.selectedIdList.length === props.data.length}
+                                onChange={props.handleClickHeaderCheckbox}
+                            />
+                        </StyledTableCell>
                         {
                             headers.map((h: any, i: number) => <StyledTableCell key={'header_' + i}> {h.text} </StyledTableCell>)
                         }
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((r: any, i: number) => (
-                        <StyledTableRow key={i} onClick={handleClickRow ? () => handleClickRow(r) : () => {}}>
+                    {rows.map((r: any, i: number) => {
+                        const isSelected = props.selectedIdList.indexOf(r._id) > -1
+                        return (
+                        <StyledTableRow hover key={i} onClick={handleClickRow ? () => handleClickRow(r) : () => {
+                        }}>
+                            <StyledTableCell padding="checkbox">
+                                <Checkbox
+                                    color="primary"
+                                    checked={isSelected}
+                                    onChange={(e) => props.handleClickCheckbox(e, r._id)}
+                                />
+                            </StyledTableCell>
                             {
-                                headers.map((h: any, i: number) => <StyledTableCell key={'body_'+i}> {r[h.key]} </StyledTableCell>)
+                                headers.map((h: any, i: number) =>
+                                    <StyledTableCell
+                                        key={'body_' + i}
+                                    >
+                                        {r[h.key]}
+                                    </StyledTableCell>
+                                )
                             }
                         </StyledTableRow>
-                    ))}
+                        )})}
                 </TableBody>
             </Table>
         </TableContainer>

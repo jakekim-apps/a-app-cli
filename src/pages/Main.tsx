@@ -1,10 +1,11 @@
 import MainLayout from "../components/layout/MainLayout";
+import {Outlet} from "react-router-dom";
 
 const MainPage = () => {
     return (
 
         <MainLayout>
-            <div>MainPage</div>
+            <Outlet />
         </MainLayout>
 
         )

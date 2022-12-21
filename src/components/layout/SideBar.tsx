@@ -13,16 +13,6 @@ const NavItems = [
         path: '/histories'
     },
     {
-        id: 'user',
-        text: 'Users',
-        path: '/users'
-    },
-    {
-        id: 'category',
-        text: 'Categories',
-        path: '/categories'
-    },
-    {
         id: 'account',
         text: 'Accounts',
         path: '/accounts'
@@ -30,8 +20,18 @@ const NavItems = [
     {
         id: 'card',
         text: 'Cards',
-        path: '/cards'
-    }
+        path: 'cards'
+    },
+    {
+        id: 'category',
+        text: 'Categories',
+        path: '/categories'
+    },
+    {
+        id: 'user',
+        text: 'Users',
+        path: '/users'
+    },
 ]
 
 

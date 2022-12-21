@@ -197,7 +197,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 
-export default function EnhancedTable() {
+export default function CommonTable() {
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
